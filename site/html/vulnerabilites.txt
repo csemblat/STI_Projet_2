@@ -1,0 +1,12 @@
+Login:
+-si login POST met plus longtemps 'usr' est un utilisateur enregistré
+-md5 cassable par collision
+-opérateur == utilisé pour la validation de mot de passe au lieu de ===
+
+Général:
+-PHPSESSID permet d'identifier l'utilisateur et peut être vu/modifié sur la console navigateur avec "document.cookie", on peut donc usurper la session d'un admin connecté(session fixation attack)
+
+-NewMessage:
+-mettre dans destinataire la string suivante (pas d'anti-injection-SQL):
+admin'); INSERT INTO Member(user, pass_md5, role, valid) VALUES('joe', 'eeafbf4d9b3957b139da7b7f2e7f2d4a', 'admin', 1); --
+
