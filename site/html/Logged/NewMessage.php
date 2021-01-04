@@ -7,7 +7,7 @@ die();
 }
 
 function cleaner($string){
-    $ennemis = array("'",'"');
+    $ennemis = array("'",'"',"<",">"); //ajout de < et > pour contrer les XSS
     return str_replace($ennemis, "", $string);
 }
 
