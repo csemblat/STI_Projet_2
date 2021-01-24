@@ -1,8 +1,21 @@
 # STI_Projet_2
-## Projet de sécurité web pour le cours de STI de l'HEIG-VD
+## Auteurs, Clément Semblat et Alban Favre
+### Projet de sécurité web pour le cours de STI de l'HEIG-VD
 
+### Démarrer l'application
 
-## Vulnérabilités et corrections :
+Il faut executer le script `server.sh`
+
+L'application est ensuite disponible sous `localhost:80`
+
+Les 2 comptes sont:
+
+|Nom d'utilisateur|Mot de passe|type|
+|---|---|---|
+|admin|PierrePaul80|admin|
+|popole|PierrePaul80|normal|
+
+### Vulnérabilités et corrections :
 
 - Injection XSS :
 
