@@ -1,5 +1,5 @@
 # STI_Projet_2
-## Auteurs, Clément Semblat et Alban Favre
+## Auteurs: Clément Semblat et Alban Favre
 ### Projet de sécurité web pour le cours de STI de l'HEIG-VD
 
 ### Démarrer l'application
