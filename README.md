@@ -21,6 +21,10 @@ Correction : bloquage par IP au bout de 30 tentatives ratées (implémentation d
 L'application n'est pas protégée contre les injections du second ordre dans la gestion des contenus postés par les utilisateurs (e.g. messages).
 Correction : Utilisation d'une fonction de nettoyage de caractères spéciaux dans la création de messages et d'utilisateurs pour empêcher l'apparition d'attaques du second ordre
 
+- accès non autorisé aux messages
+
+Un utilisateur peut changer l'id des messages et peut donc acceder a tous les messages stockés dans la database
+
 - Infrastructure :
 
 Selon un scan Nessus l'application possède plusieurs vulnérabilités (e.g. DoS, input validation error, XSS) dû aux versions de PHP et JQuery qui ne sont pas à jour.
