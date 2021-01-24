@@ -9,6 +9,10 @@ $messageRM = "";
 $messageADD = "";
 $messageMOD = "";
 $MDPmessage = "";
+function cleaner($string){
+    $ennemis = array("'",'"',"<",">"); //ajout de < et > pour contrer les XSS
+    return str_replace($ennemis, "", $string);
+}
 
 if 	($_SERVER['REQUEST_METHOD'] === 'POST'){
     if ($_POST['changepass']) {
@@ -109,8 +113,8 @@ if 	($_SERVER['REQUEST_METHOD'] === 'POST'){
             // Set errormode to exceptions
             $db->setAttribute(PDO::ATTR_ERRMODE, 
                                     PDO::ERRMODE_EXCEPTION);
-            
-            $statement = $db->query("SELECT * FROM Member WHERE user LIKE '{$_POST['usr_name']}';");
+            $added_usr = cleaner($_POST['usr_name']); //added to avoid XSS attack being committed after privilege escalation
+            $statement = $db->query("SELECT * FROM Member WHERE user LIKE '{$added_usr}';");
             $statement->execute();
     
             $resultat = $statement->fetch();
@@ -124,7 +128,7 @@ if 	($_SERVER['REQUEST_METHOD'] === 'POST'){
 
                 $statementE = $db->query("INSERT INTO
                 Member(user, pass_md5, role, valid) 
-                VALUES('{$_POST['usr_name']}', '{$md5}', '{$_POST['role_val']}', {$valid});");
+                VALUES('{$added_usr}', '{$md5}', '{$_POST['role_val']}', {$valid});");
     
                 if (!$statementE){
                     $messageADD = 'Echec de l ajout';

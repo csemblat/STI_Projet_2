@@ -4,15 +4,20 @@ echo "not logged in yet";
 header("Location: ../login.php");
 die();
 }
+function cleaner($string){
+    $ennemis = array("'",'"',"<",">"); //ajout de < et > pour contrer les XSS
+    return str_replace($ennemis, "", $string);
+}
+
 $db = new PDO('sqlite:/usr/share/nginx/databases/database.sqlite');
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 $exp="";
 $subject="";
 $content="";
-$id = $_GET['i'];
+$id = cleaner($_GET['i']);
 
-$statement = $db->query("SELECT exp, subject, content FROM Messages WHERE id = '{$_GET['i']}';");
+$statement = $db->query("SELECT exp, subject, content FROM Messages WHERE id = '{$id}';");
 $statement->execute();
 $resultat = $statement->fetch();
 if($resultat){

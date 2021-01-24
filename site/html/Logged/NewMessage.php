@@ -31,12 +31,13 @@ if 	($_SERVER['REQUEST_METHOD'] === 'POST'){
             $date = date('H:i d/m/Y');
             $Ssubject = cleaner($_POST['subject']);
             $Scontent = cleaner($_POST['msg']);
+            $Sdest = cleaner($_POST['dest']); //ajouté pour empêcher de potentielles injections
 
             $message = $Scontent;
 
             $statementE = $db->query("INSERT INTO
             Messages(exp, dest, subject, content, date) 
-            VALUES('{$_SESSION['user']}', '{$_POST['dest']}', '{$Ssubject}', '{$Scontent}', '{$date}');");
+            VALUES('{$_SESSION['user']}', '{$Sdest}', '{$Ssubject}', '{$Scontent}', '{$date}');");
 
             if (!$statementE){
                 $message = 'Echec de l envoie';

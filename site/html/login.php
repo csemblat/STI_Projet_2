@@ -4,6 +4,55 @@ session_start();
 // if they are the same
 
 $message = "";
+/*
+fonctions anti-bruteforce (Projet 2)
+Création de fichiers dans le dossier site/databases pour suivre le nombre de tentatives ratées 
+*/
+//added for registering failed login attempts
+function attempt_register($string){
+	$increment = 1;
+	for($increment = 1; $increment <= 30; $increment++)
+	{
+	  if(file_exists("/usr/share/nginx/databases/{$string}{$increment}.txt") === false){
+		$myfile = fopen("/usr/share/nginx/databases/{$string}{$increment}.txt", "w") or die("Unable to open file!");
+		fwrite($myfile, "1", 4);
+		fclose($myfile);
+		break;
+	  }
+	}
+}
+//verifies how many times ip has attempted to log in
+function login_attempts_num($string){
+	$value_keep = 0;
+	$increment = 1;
+	for($increment = 1; $increment <= 31; $increment++)
+	{
+	  if(file_exists("/usr/share/nginx/databases/{$string}{$increment}.txt") === false){
+		$value_keep = $increment;
+		break;
+	  }
+	}
+	return $value_keep - 1;
+}
+//verifies if ip should be blocked
+function verify_block($string){ //verifies if ip has logged in too many times
+	$result = false;
+	if(login_attempts_num($string) >= 30){
+	$result = true;
+	}
+	return $result;
+}
+//cleans up ip to avoid troubles when creating files
+function ip_cleaner($string){
+    $ennemis = array(".","'",'"',"<",">"); //ajout de . pour empêcher des problèmes avec l'interpréteur. les autres caractères sont là au cas où.
+    return str_replace($ennemis, "", $string);
+}
+//ip du potentiel attaquant :
+$Querier_ip = strval(ip_cleaner($_SERVER['REMOTE_ADDR'])); 
+/*
+fin des fonctions anti-bruteforce
+*/
+
 
 if 	($_SERVER['REQUEST_METHOD'] === 'POST'){
 	try{
@@ -36,8 +85,17 @@ if 	($_SERVER['REQUEST_METHOD'] === 'POST'){
 	}
 
 	// Now we check the password
-	if (!$resultat){
-		$message =  'Erreur de connection - Vérifiez vos informations';
+	if (!$resultat  || verify_block($Querier_ip)){
+		if(verify_block($Querier_ip) === false && $_POST['usr'] != ""){ //tentative d'attaque seulement si un nom d'utilisateur a été mis
+		attempt_register($Querier_ip);
+		$message =  'Erreur de connection - Vérifiez vos informations, limite d essais : 30 avant blocage par IP';
+		}
+		else{
+		$message = "IP BLOCKED";
+		}
+		
+
+		
 	} else {
 		if (md5($_POST['pass']) == $resultat['pass_md5'] && $resultat['valid'] == 1){
 			$_SESSION["role"] = $resultat["role"];
@@ -81,7 +139,8 @@ if 	($_SERVER['REQUEST_METHOD'] === 'POST'){
 				<label>Mot de passe</label>
 				<input type="password" placeholder="Veuillez saisir votre mot de passe" name="pass" required><br>
 				<input type="submit" id="submit" value="Connection">
-				<p><?php echo $message; ?></p>	
+				<p><?php echo $message; ?></p>
+
 			</form>	
 		</div>
 	</body>

@@ -25,8 +25,8 @@ if 	($_SERVER['REQUEST_METHOD'] === 'POST'){
         if(!$resultat){
             $message = "Mauvais mot de passe";
         }else{
-            $mdc = md5($_POST['passChange']);
-            if (md5($_POST['pass']) === $resultat['pass_md5']){
+            $mdc = md5($_POST['passChange']); //pas besoin de nettoyer car jamais reflété vers l'utilisateur ou envoyé intact au datastore
+            if (md5($_POST['pass']) === $resultat['pass_md5']){ 
                 $statementE = $db->query("UPDATE Member SET pass_md5='{$mdc}' WHERE user LIKE '{$_SESSION['user']}';");
     
                 if (!$statementE){
