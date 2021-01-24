@@ -13,8 +13,8 @@ function attempt_register($string){
 	$increment = 1;
 	for($increment = 1; $increment <= 30; $increment++)
 	{
-	  if(file_exists("/usr/share/nginx/databases/{$string}{$increment}.txt") === false){
-		$myfile = fopen("/usr/share/nginx/databases/{$string}{$increment}.txt", "w") or die("Unable to open file!");
+	  if(file_exists("/usr/share/nginx/databases/{$string}_{$increment}.txt") === false){
+		$myfile = fopen("/usr/share/nginx/databases/{$string}_{$increment}.txt", "w") or die("Unable to open file!");
 		fwrite($myfile, "1", 4);
 		fclose($myfile);
 		break;
@@ -27,7 +27,7 @@ function login_attempts_num($string){
 	$increment = 1;
 	for($increment = 1; $increment <= 31; $increment++)
 	{
-	  if(file_exists("/usr/share/nginx/databases/{$string}{$increment}.txt") === false){
+	  if(file_exists("/usr/share/nginx/databases/{$string}_{$increment}.txt") === false){
 		$value_keep = $increment;
 		break;
 	  }
@@ -45,7 +45,7 @@ function verify_block($string){ //verifies if ip has logged in too many times
 //cleans up ip to avoid troubles when creating files
 function ip_cleaner($string){
     $ennemis = array(".","'",'"',"<",">"); //ajout de . pour empêcher des problèmes avec l'interpréteur. les autres caractères sont là au cas où.
-    return str_replace($ennemis, "", $string);
+    return str_replace($ennemis, "_", $string);
 }
 //ip du potentiel attaquant :
 $Querier_ip = strval(ip_cleaner($_SERVER['REMOTE_ADDR'])); 
