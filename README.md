@@ -6,7 +6,7 @@
 
 Il faut executer le script `server.sh`
 
-L'application est ensuite disponible sous `localhost:80`
+L'application est ensuite disponible sous `localhost:8080`
 
 Les 2 comptes sont:
 
